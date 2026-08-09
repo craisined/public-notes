@@ -1,1 +1,1 @@
-Hello, this is a really basic test of repo syncing
+Hello, these are my public notes, usually about math or CS. Find prettier versions at https://notes.craisin.tech, or find me at https://craisin.tech!
