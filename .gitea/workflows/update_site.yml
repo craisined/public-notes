@@ -1,0 +1,27 @@
+name: Update Website
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: content
+      - name: Clone repository
+        run: |
+          git clone https://github.com/craisined/public-notes.git
+          rm public-notes/content/*
+          mv content/* public-notes/content/
+          cd public-notes
+          git config user.name "craisined"
+          git config user.email "kahkaicyap@gmail.com"
+          git add .
+          git commit -m "Update content"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
