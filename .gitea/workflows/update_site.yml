@@ -14,14 +14,18 @@ jobs:
           path: content
       - name: Clone repository
         run: |
-          git clone https://github.com/craisined/public-notes.git
-          rm public-notes/content/*
-          mv content/* public-notes/content/
-          cd public-notes
+          git clone https://x-access-token:${GH_TOKEN}@github.com/craisined/public-notes-quartz.git
+          rm -rf public-notes-quartz/content/*
+          cp -a content/. public-notes-quartz/content/
+          cd public-notes-quartz
           git config user.name "craisined"
           git config user.email "kahkaicyap@gmail.com"
           git add .
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
           git commit -m "Update content"
           git push origin master
         env:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          GH_TOKEN: ${{secrets.GH_TOKEN}}
