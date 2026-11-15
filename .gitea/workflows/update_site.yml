@@ -1,0 +1,31 @@
+name: Update Website
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: content
+      - name: Update repository
+        run: |
+          git clone https://x-access-token:${GH_TOKEN}@github.com/craisined/public-notes-quartz.git
+          rm -rf public-notes-quartz/content/*
+          cp -a content/. public-notes-quartz/content/
+          cd public-notes-quartz
+          git config user.name "craisined"
+          git config user.email "kahkaicyap@gmail.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update content"
+          git push
+        env:
+          GH_TOKEN: ${{secrets.GH_TOKEN}}
